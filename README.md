@@ -8,11 +8,11 @@ Firstly, you'll have to gather the following things:
 - The traces that correspond to the specific Unity version and platform (`xref_gen.json`). You can generate the data with [xref_gen](https://github.com/StackDoubleFlow/xref_gen).
 - The application's il2cpp shared object file (`libil2cpp.so`) and global metadata file (`global-metadata.dat`).
 
-With those placed inside the `./data` directory, you can run the following command to generate a JSON file containing the addresses of symbols:
+With those placed inside the `./data` directory, you can run the following command to generate a JSON file containing the addresses of any symbols it can find:
 ```
 cargo run --release -- data/libil2cpp.so data/global-metadata.dat data/xref_gen.json
 ```
-The output will be placed in `./data/xref_apply.json`.
+The output will be placed in `./data/xref_apply.json`. You may see several errors, but it is normal not to be able to sucessfully trace all symbols. These can be safely ignored.
 
 ## Importing into Ghidra
 
