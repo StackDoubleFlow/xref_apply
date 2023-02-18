@@ -45,7 +45,7 @@ dependencies = [
  "cfg-if",
  "libc",
  "miniz_oxide",
- "object",
+ "object 0.29.0",
  "rustc-demangle",
 ]
 
@@ -140,9 +140,9 @@ checksum = "bef38d45163c2f1dde094a7dfd33ccf595c92905c8f8f4fdc18d06fb1037718a"
 
 [[package]]
 name = "bitvec"
-version = "0.22.3"
+version = "1.0.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "5237f00a8c86130a0cc317830e558b966dd7850d48a953d998c813f01a41b527"
+checksum = "1bc2832c24239b0141d5674bb9174f9d68a8b5b3f2753311927c172ca46f7e9c"
 dependencies = [
  "funty",
  "radium",
@@ -319,9 +319,9 @@ dependencies = [
 
 [[package]]
 name = "deku"
-version = "0.13.1"
+version = "0.15.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "868ccf23869582b2d79279e402db457fe341da24a0c5a8927c6154a5b4733dc3"
+checksum = "c3d631ba36587888e2f176cda075d73971c504283efd7d0112997a3fd02372c0"
 dependencies = [
  "bitvec",
  "deku_derive",
@@ -329,9 +329,9 @@ dependencies = [
 
 [[package]]
 name = "deku_derive"
-version = "0.13.1"
+version = "0.15.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "4dfb4274ccd1c87a598e98b398b4b630aecb2e8a32fd7c88ffa190fb73870f72"
+checksum = "9009099da9734d3dc49ce9c8c7f9b12905612c84c6dd4b4c075455743e47840d"
 dependencies = [
  "darling",
  "proc-macro-crate",
@@ -374,9 +374,9 @@ checksum = "3f9eec918d3f24069decb9af1554cad7c880e2da24a9afd88aca000531ab82c1"
 
 [[package]]
 name = "funty"
-version = "1.2.0"
+version = "2.0.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "1847abb9cb65d566acd5942e94aea9c8f547ad02c98e1649326fc0e8910b8b1e"
+checksum = "e6d5a32815ae3f33302d95fdcb2ce17862f8c65363dcfd29360480ba1001fc9c"
 
 [[package]]
 name = "gimli"
@@ -420,18 +420,20 @@ checksum = "b9e0384b61958566e926dc50660321d12159025e767c18e043daf26b70104c39"
 [[package]]
 name = "il2cpp_binary"
 version = "0.1.0"
+source = "git+https://github.com/StackDoubleFlow/brocolib.git#00d4a6b88554a6945865155c3d9dae1dc652ba33"
 dependencies = [
  "bad64",
  "binread",
  "byteorder",
  "il2cpp_metadata_raw",
- "object",
+ "object 0.30.3",
  "thiserror",
 ]
 
 [[package]]
 name = "il2cpp_metadata_raw"
 version = "0.1.0"
+source = "git+https://github.com/StackDoubleFlow/brocolib.git#00d4a6b88554a6945865155c3d9dae1dc652ba33"
 dependencies = [
  "binde",
  "deku",
@@ -554,6 +556,15 @@ version = "0.29.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "21158b2c33aa6d4561f1c0a6ea283ca92bc54802a93b263e910746d679a7eb53"
 dependencies = [
+ "memchr",
+]
+
+[[package]]
+name = "object"
+version = "0.30.3"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "ea86265d3d3dcb6a27fc51bd29a4bf387fae9d2986b823079d4986af253eb439"
+dependencies = [
  "flate2",
  "memchr",
 ]
@@ -643,9 +654,9 @@ dependencies = [
 
 [[package]]
 name = "radium"
-version = "0.6.2"
+version = "0.7.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "643f8f41a8ebc4c5dc4515c82bb8abd397b527fc20fd681b7c011c2aee5d44fb"
+checksum = "dc33ff2d4973d518d823d61aa239014831e521c75da58e3df4840d3f47749d09"
 
 [[package]]
 name = "regex"
@@ -907,9 +918,9 @@ checksum = "712e227841d057c1ee1cd2fb22fa7e5a5461ae8e48fa2ca79ec42cfc1931183f"
 
 [[package]]
 name = "wyz"
-version = "0.4.0"
+version = "0.5.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "129e027ad65ce1453680623c3fb5163cbf7107bfe1aa32257e7d0e63f9ced188"
+checksum = "05f360fc0b24296329c78fda852a1e9ae82de9cf7b27dae4b7f62f118f77b9ed"
 dependencies = [
  "tap",
 ]
@@ -923,7 +934,7 @@ dependencies = [
  "color-eyre",
  "il2cpp_binary",
  "il2cpp_metadata_raw",
- "object",
+ "object 0.30.3",
  "serde",
  "serde_json",
 ]
