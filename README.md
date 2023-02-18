@@ -1,4 +1,4 @@
-# xref-apply
+# xref_apply
 
 A command line tool to find symbol addresses in Unity IL2CPP AArch64 applications using xref traces.
 
