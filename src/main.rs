@@ -1,8 +1,10 @@
 use bad64::{Imm, Instruction, Op, Operand};
+use brocolib::global_metadata::Token;
+use brocolib::runtime_metadata::elf::Elf;
+use brocolib::runtime_metadata::{Il2CppCodeRegistration, RuntimeMetadata};
+use brocolib::Metadata;
 use clap::Parser;
 use color_eyre::eyre::{bail, eyre, ContextCompat, Result};
-use il2cpp_binary::{CodeRegistration, Elf};
-use il2cpp_metadata_raw::Metadata;
 use object::{Object, ObjectSymbol};
 use serde::{Deserialize, Serialize};
 use std::collections::{HashMap, HashSet};
@@ -31,8 +33,13 @@ fn main() -> Result<()> {
     let elf = Elf::parse(&elf_data)?;
 
     let metadata_data = fs::read(&args.metadata)?;
-    let metadata = il2cpp_metadata_raw::deserialize(&metadata_data)?;
-    let (cr, _) = il2cpp_binary::registrations(&elf, &metadata)?;
+    let global_metadata = brocolib::global_metadata::deserialize(&metadata_data)?;
+    let runtime_metadata = RuntimeMetadata::read(&elf, &global_metadata)?;
+    let metadata = Metadata {
+        global_metadata,
+        runtime_metadata,
+    };
+    let cr = &metadata.runtime_metadata.code_registration;
 
     let xref_data = serde_json::from_str(&fs::read_to_string(&args.xref_data)?)?;
     let roots = find_roots(&metadata, &cr, &xref_data)?;
@@ -62,18 +69,12 @@ fn main() -> Result<()> {
     Ok(())
 }
 
-fn offset_len(offset: u32, len: u32) -> std::ops::Range<usize> {
-    if (offset as i32) < 0 {
-        return 0..0;
-    }
-    offset as usize..offset as usize + len as usize
-}
-
 fn find_roots<'md>(
     metadata: &'md Metadata,
-    code_registration: &CodeRegistration,
+    code_registration: &Il2CppCodeRegistration,
     xref_data: &XRefData,
 ) -> Result<Roots<'md>> {
+    let global_metadata = &metadata.global_metadata;
     let mut required_roots = HashSet::new();
     for trace in &xref_data.traces {
         if trace.start.starts_with("il2cpp:") || trace.start.starts_with("invoker:") {
@@ -86,15 +87,15 @@ fn find_roots<'md>(
     }
 
     let mut roots = HashMap::new();
-    for image in &metadata.images {
-        let image_name = metadata.get_str(image.name_index)?;
-        let type_defs_range = offset_len(image.type_start, image.type_count);
-        for type_def in &metadata.type_definitions[type_defs_range] {
-            let method_range = offset_len(type_def.method_start, type_def.method_count as u32);
-            let namespace = metadata.get_str(type_def.namespace_index)?;
-            let class = metadata.get_str(type_def.name_index)?;
-            for method in &metadata.methods[method_range] {
-                let method_name = metadata.get_str(method.name_index)?;
+    for image in global_metadata.images.as_vec() {
+        let image_name = image.name(metadata);
+        let type_defs = image.types(metadata);
+        for type_def in type_defs {
+            let namespace = type_def.namespace(metadata);
+            let class = type_def.name(metadata);
+            let methods = type_def.methods(metadata);
+            for method in methods {
+                let method_name = method.name(metadata);
                 if required_roots
                     .take(&(namespace, class, method_name))
                     .is_some()
@@ -118,8 +119,12 @@ struct Root {
 }
 
 impl Root {
-    fn get(token: u32, image_name: &str, code_registration: &CodeRegistration) -> Result<Self> {
-        let rid = 0x00FFFFFF & token;
+    fn get(
+        token: Token,
+        image_name: &str,
+        code_registration: &Il2CppCodeRegistration,
+    ) -> Result<Self> {
+        let rid = token.rid();
         let module = code_registration
             .code_gen_modules
             .iter()
