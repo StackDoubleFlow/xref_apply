@@ -141,7 +141,7 @@ checksum = "bef38d45163c2f1dde094a7dfd33ccf595c92905c8f8f4fdc18d06fb1037718a"
 [[package]]
 name = "brocolib"
 version = "0.1.0"
-source = "git+https://github.com/StackDoubleFlow/brocolib.git?branch=il2cpp_v29#d38b18013af7b232de370ebd32cc720ef0f5cca0"
+source = "git+https://github.com/StackDoubleFlow/brocolib.git?branch=il2cpp_v29#b5e55c22a9e70e300d94166c9acce14c394f2b87"
 dependencies = [
  "bad64",
  "binde",
@@ -720,9 +720,9 @@ dependencies = [
 
 [[package]]
 name = "tracing-core"
-version = "0.1.30"
+version = "0.1.31"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "24eb03ba0eab1fd845050058ce5e616558e8f8d8fca633e6b163fe25c797213a"
+checksum = "0955b8137a1df6f1a2e9a37d8a6656291ff0297c1a97c24e0d8425fe2312f79a"
 dependencies = [
  "once_cell",
  "valuable",
