@@ -1,6 +1,6 @@
 use bad64::{Imm, Instruction, Op, Operand};
 use brocolib::global_metadata::Token;
-use brocolib::runtime_metadata::elf::Elf;
+use brocolib::runtime_metadata::elf::{vaddr_conv, Elf};
 use brocolib::runtime_metadata::{Il2CppCodeRegistration, RuntimeMetadata};
 use brocolib::Metadata;
 use clap::Parser;
@@ -273,8 +273,8 @@ impl<'a> XRefTracer<'a> {
     }
 
     fn load_ins(&self, addr: u64) -> Result<Instruction> {
-        let addr = addr as usize;
-        let data = &self.elf.data()[addr..addr + 4];
+        let offset = vaddr_conv(self.elf, addr)? as usize;
+        let data = &self.elf.data()[offset..offset + 4];
         let data = u32::from_le_bytes([data[0], data[1], data[2], data[3]]);
         bad64::decode(data, addr as u64)
             .map_err(|err| eyre!("decode error during xref walk: {}", err))
